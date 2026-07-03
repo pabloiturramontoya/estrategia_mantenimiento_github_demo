@@ -1,0 +1,295 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estrategia de mantenimiento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'demo/styles.css' %}">
+</head>
+<body>
+  <div class="demo-watermark" aria-hidden="true">DEMO NO OPERACIONAL</div>
+  <div class="container mt-5 mb-5">
+    <div id="export-frame">
+      <section class="hero-shell mb-4">
+        <div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-3">
+          <div>
+            <div class="eyebrow-chip mb-2">Vista conceptual para presentacion comercial</div>
+            <h2 class="page-title mb-1">Estrategia de mantenimiento</h2>
+            <p class="hero-copy mb-0">Interfaz demo con datos sinteticos, prioridades demostrativas y visuales desacoplados de la logica operacional real.</p>
+          </div>
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <button type="button" class="btn btn-sm btn-outline-success" disabled>Descargar Excel</button>
+            <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#modal-recomendaciones">Recomendaciones</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" disabled>Descargar area</button>
+            <button type="button" class="btn btn-sm btn-outline-primary" disabled>Descargar informe</button>
+          </div>
+        </div>
+        <div class="demo-banner">
+          <div class="demo-banner-title">Modo demo</div>
+          <div class="demo-banner-copy">
+            Los KPI, rankings y curvas de esta publicacion son referenciales. No representan formulas ni umbrales productivos del sistema original.
+          </div>
+        </div>
+      </section>
+
+      <a href="#" class="d-block text-decoration-none mb-4">
+        <div class="card border-0 shadow-sm viki-card">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center gap-3">
+              <div class="viki-logo">VIKI</div>
+              <div>
+                <div class="fw-bold mb-1 viki-badge">V.I.K.I.</div>
+                <p class="mb-0 viki-copy">Revisa la plataforma de apoyo operativo y documental V.I.K.I.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <div class="card p-3 shadow-sm mb-4 filters-card">
+        <div class="filters-head mb-3">
+          <div class="section-kicker">Capa exploratoria</div>
+          <div class="text-muted small">Los filtros alteran una maqueta analitica demostrativa, no un motor de decision real.</div>
+        </div>
+        <form id="filters-form" class="d-flex gap-2 filters-row">
+          <div class="filter-slot">
+            <label class="form-label small mb-1">Ano</label>
+            <div class="dropdown w-100 portal-dropdown" data-group="anio">
+              <button class="btn btn-outline-secondary btn-sm dropdown-toggle w-100 text-truncate" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="btn-anio">Ano</button>
+              <div class="dropdown-menu p-2"></div>
+            </div>
+          </div>
+          <div class="filter-slot">
+            <label class="form-label small mb-1">Mes</label>
+            <div class="dropdown w-100 portal-dropdown" data-group="mes">
+              <button class="btn btn-outline-secondary btn-sm dropdown-toggle w-100 text-truncate" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="btn-mes">Mes</button>
+              <div class="dropdown-menu p-2"></div>
+            </div>
+          </div>
+          <div class="filter-slot">
+            <label class="form-label small mb-1">Semana</label>
+            <div class="dropdown w-100 portal-dropdown" data-group="semana">
+              <button class="btn btn-outline-secondary btn-sm dropdown-toggle w-100 text-truncate" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="btn-semana">Semana</button>
+              <div class="dropdown-menu p-2"></div>
+            </div>
+          </div>
+          <div class="filter-slot filter-slot-wide">
+            <label class="form-label small mb-1">Responsable</label>
+            <div class="dropdown w-100 portal-dropdown" data-group="responsable">
+              <button class="btn btn-outline-secondary btn-sm dropdown-toggle w-100 text-truncate" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="btn-responsable">Responsable</button>
+              <div class="dropdown-menu p-2"></div>
+            </div>
+          </div>
+          <div class="filter-slot">
+            <label class="form-label small mb-1">Linea</label>
+            <select id="filter-linea" class="form-select form-select-sm"></select>
+          </div>
+          <div class="filter-slot">
+            <label class="form-label small mb-1">Equipo</label>
+            <select id="filter-equipo" class="form-select form-select-sm"></select>
+          </div>
+          <div class="filter-slot">
+            <label class="form-label small mb-1">Duracion <= (min)</label>
+            <input id="filter-duracion" type="number" step="1" min="0" class="form-control form-control-sm" placeholder="min">
+          </div>
+          <div class="filter-submit">
+            <button type="button" class="btn btn-primary btn-sm" id="apply-filters">Filtrar</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="kpi-cards" class="d-flex gap-2 kpi-row"></div>
+
+      <div class="row mt-3 g-3">
+        <div class="col-12 col-lg-7">
+          <div class="card p-3 shadow-sm h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-sm p-0 metric-help" data-bs-toggle="modal" data-bs-target="#modal-jackknife-help" title="Que significa Jack Knife?">?</button>
+                <h6 class="mb-0 section-title">
+                  Mapa de prioridad demo
+                  <span class="text-muted" id="scatter-count">(0)</span>
+                  <small id="scatter-title-suffix" class="text-muted"></small>
+                </h6>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-primary" disabled>Descargar</button>
+            </div>
+            <div class="chart-container"><canvas id="chart-equipos-log2"></canvas></div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-5">
+          <div class="card p-3 shadow-sm h-100">
+            <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-sm p-0 metric-help" data-bs-toggle="modal" data-bs-target="#modal-pareto-help" title="Que es el grafico Pareto?">?</button>
+                <h6 class="mb-0 section-title">Impacto visual por equipo <small id="bar-title-suffix" class="text-muted"></small></h6>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-primary" disabled>Descargar</button>
+            </div>
+            <div class="chart-container"><canvas id="chart-tfs-bar"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3 g-3">
+        <div class="col-12">
+          <div class="card p-3 shadow-sm">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+              <div class="d-flex align-items-start gap-2">
+                <div class="top-icon">^</div>
+                <div>
+                  <h6 class="mb-1 section-title">Ranking visual - Top 10</h6>
+                  <div class="text-muted small">Jerarquia sintetica para demo ejecutiva del periodo filtrado.</div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-primary" disabled>Descargar</button>
+            </div>
+            <div class="chart-container chart-tall"><canvas id="chart-malos-top"></canvas></div>
+            <div id="malos-top-empty" class="text-center text-muted small mt-3 d-none">Sin datos para los filtros seleccionados.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card p-3 shadow-sm mt-3">
+        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+          <h6 class="mb-0 section-title">Eventos sinteticos del periodo</h6>
+          <span class="text-muted small" id="records-count">0 registros</span>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-middle table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Inicio</th>
+                <th>Termino</th>
+                <th>Linea</th>
+                <th>Equipo</th>
+                <th>Falla</th>
+                <th>Responsable</th>
+                <th>Duracion (min)</th>
+              </tr>
+            </thead>
+            <tbody id="records-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-jackknife-help" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Que es este mapa de prioridad demo?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <p>Esta vista resume senales sinteticas para una presentacion comercial. Conserva la idea de priorizacion visual, pero no expone la logica operacional original.</p>
+          <ul class="mb-0">
+            <li><strong>Eje X:</strong> recurrencia demo.</li>
+            <li><strong>Eje Y:</strong> severidad visual.</li>
+            <li><strong>Click en un punto:</strong> abre una curva historica sintetica del modo dominante.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-pareto-help" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Que muestra este ranking de impacto?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <p>Ordena equipos segun un puntaje demostrativo de impacto visual. Sirve para mostrar lectura ejecutiva sin revelar criterios reales.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-recomendaciones" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Recomendaciones</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <ol class="mb-0">
+            <li>Usar esta maqueta para presentar experiencia de navegacion, no para tomar decisiones tecnicas.</li>
+            <li>Enfocar la conversacion en recorridos, jerarquias visuales y narrativa ejecutiva.</li>
+            <li>Tratar todos los valores como demostrativos y desacoplados del modelo operacional.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-detail" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h5 class="mb-0 modal-title section-title">Curva historica demostrativa <small id="detail-title" class="text-muted"></small></h5>
+            <div class="text-muted small" id="detail-subtitle"></div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3 mb-3">
+            <div class="col-12 col-md-3">
+              <label class="form-label small mb-1">Desde</label>
+              <input type="month" id="detail-from" class="form-control form-control-sm">
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label small mb-1">Hasta</label>
+              <input type="month" id="detail-to" class="form-control form-control-sm">
+            </div>
+            <div class="col-12 col-md-3 d-flex align-items-end">
+              <button type="button" class="btn btn-primary btn-sm" id="apply-detail-filter">Filtrar</button>
+            </div>
+          </div>
+          <div class="card p-3 shadow-sm mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="mb-0 section-title">Grafico historico de eventos</h6>
+              <span class="text-muted small">Fecha vs duracion</span>
+            </div>
+            <div class="chart-container"><canvas id="detail-line-chart"></canvas></div>
+          </div>
+          <div class="card p-3 shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="mb-0 section-title">Registros asociados</h6>
+              <span class="text-muted small" id="detail-count"></span>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-middle table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Falla</th>
+                    <th>Duracion (min)</th>
+                  </tr>
+                </thead>
+                <tbody id="modal-records-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.DEMO_DATA_URL = "{% static 'demo/data/sample_month.json' %}";
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="{% static 'demo/app.js' %}"></script>
+</body>
+</html>

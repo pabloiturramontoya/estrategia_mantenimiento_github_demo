@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: estrategia-mantenimiento-django-demo
+    env: python
+    buildCommand: "bash build.sh"
+    startCommand: "gunicorn config.wsgi:application"
